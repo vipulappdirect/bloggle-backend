@@ -18,8 +18,8 @@ model User {
 
 model Post {
   id        Int      @id @default(autoincrement())
-  title     String
-  content   String
+  title     String   @db.Text
+  content   String   @db.Text
   authorId  Int
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id])
