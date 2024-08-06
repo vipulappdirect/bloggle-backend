@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
     "start": "ts-node src/index.ts",
-    "build": "npx prisma generate && npm install && tsc"
+    "build": "cd src/repository && prisma generate && cd ../.. && npm install && tsc"
   },
   "keywords": [],
   "author": "",
