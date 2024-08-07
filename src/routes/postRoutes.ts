@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client';
 const postRoutes = (prisma: PrismaClient) => {
     const router = Router();
     const controller = postController(prisma);
-
+    console.log('Private API request.')
     router.post('/createPost', controller.createPost);
     router.post('/getAuthorPosts', controller.getPostsByAuthor);
     router.delete('/deletePost/:authorId', controller.deletePostsByAuthor);
