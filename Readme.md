@@ -1,8 +1,11 @@
 
 # Express.js | Bloggle Backend | Setup and Execution
 
-## Deployed at: [Bloggle Express JS Backend Service](https://bloggle-kljc.vercel.app/api/home)
+## BackEnd Deployed at: [Bloggle Express JS Backend Service](https://bloggle-kljc.vercel.app/api/home)
 ## GIT Repository: [Bloggle Express JS Backend Service GIT Repository](https://github.com/vipulappdirect/bloggle-backend)
+
+## Ui Deployed at: [Bloggle Next JS Frontend Service](https://bloggle-puce.vercel.app/)
+## GIT Repository: [Bloggle Next JS Frontend Service GIT Repository](https://github.com/vipulappdirect/bloggle-ui)
 
 This README provides instructions on how to set up and run the Next.js project in various environments.
 
