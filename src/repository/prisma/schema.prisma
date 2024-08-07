@@ -13,17 +13,17 @@ model User {
   id           Int    @id @default(autoincrement())
   email        String @unique
   passwordHash String
-  posts        Post[]
+  posts        Post[] @relation("UserPosts") // Optional: named relation for clarity
 }
 
 model Post {
   id        Int      @id @default(autoincrement())
   title     String   @db.Text
   content   String   @db.Text
-  imageURL  String   @default("https://via.placeholder.com/500x250.png?text=Default+Image") @db.VarChar(2000)
-  authorId  Int
+  imageURL  String   @default("https://as1.ftcdn.net/v2/jpg/03/00/17/00/1000_F_300170007_EeUnk2vDMLQJDQh0sStL46tH0rTUy1j3.jpg") @db.VarChar(2000)
+  authorId  String
   createdAt DateTime @default(now())
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation("UserPosts", fields: [authorId], references: [email])
 
   @@index([authorId])
 }

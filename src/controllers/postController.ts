@@ -11,7 +11,7 @@ const postController = (prisma: PrismaClient) => {
                 const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: number };
                 if (!decoded) return res.status(401).send('Unauthorized: Invalid Token.');
                 const post = await prisma.post.create({
-                    data: { title, content, authorId: decoded.userId, imageURL: imageUrl },
+                    data: { title, content, authorId: decoded.userId as unknown as string, imageURL: imageUrl },
                 });
                 res.status(201).json(post);
             } catch (error) {
@@ -33,11 +33,10 @@ const postController = (prisma: PrismaClient) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: number };
             if (!decoded) return res.status(401).send('Unauthorized: Invalid Token.');
             const author = decoded.userId;
-            if (!author || isNaN(Number(author))
-            ) return res.status(400).send('Invalid author ID.');
+            if (!author) return res.status(400).send('Invalid author ID.');
             try {
                 const posts = await prisma.post.findMany({
-                    where: { authorId: author }
+                    where: { authorId: author as unknown as string },
                 });
                 return res.json(posts);
             } catch (error) {

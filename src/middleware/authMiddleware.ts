@@ -8,8 +8,8 @@ const authMiddleware = (prisma: PrismaClient) => {
         if (!token) return res.status(404).send('Access Denied.');
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: number };
-            const user: User = await prisma.user.findUnique({
-                where: { id: decoded.userId }
+            const user: User = await prisma.user.findFirst({
+                where: { email: decoded.userId as unknown as string}
             }) as User;
             req.user = user;
             if (!req.user) return res.status(401).send('Invalid Token.');

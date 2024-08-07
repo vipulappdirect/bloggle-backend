@@ -15,7 +15,7 @@ const authController = (prisma: PrismaClient) => {
                         passwordHash: hashedPassword
                     }
                 }) as User;
-                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1hr' });
+                const token = jwt.sign({ userId: user.email }, process.env.JWT_SECRET as string, { expiresIn: '1hr' });
                 return res.status(201).json({ token: token, username: user.email});
             } catch (error) {
                 return res.status(500).send('User Already Exist, Please Log In.');
@@ -31,7 +31,7 @@ const authController = (prisma: PrismaClient) => {
                 const validPassword = await bcrypt.compare(password, user.passwordHash);
                 if (!validPassword) return res.status(401).send('Invalid email or passwords.');
 
-                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1hr' });
+                const token = jwt.sign({ userId: user.email }, process.env.JWT_SECRET as string, { expiresIn: '1hr' });
                 return res.json({ token: token, username: user.email });
             } catch (error) {
                 return res.status(500).send('Error logging in.');
