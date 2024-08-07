@@ -7,6 +7,7 @@ const feedRoutes = (prisma: PrismaClient) => {
     const controller = postController(prisma);
 
     router.get('/getAllPosts', controller.getAllPosts);
+    router.get('/getPostById/:postId', controller.getPostByPostId);
 
     return router;
 };

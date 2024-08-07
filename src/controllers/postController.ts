@@ -56,6 +56,19 @@ const postController = (prisma: PrismaClient) => {
 
         testApi: (req: Request, res: Response) => {
             return res.status(200).json({ message: 'Test API' });
+        },
+
+        getPostByPostId: async (req: Request, res: Response) => {
+            const { postId } = req.params;
+            if (!postId || isNaN(Number(postId))) return res.status(400).send('Invalid post ID.');
+            try {
+                const post = await prisma.post.findUnique({
+                    where: { id: Number(postId) }
+                });
+                return res.json(post);
+            } catch (error) {
+                res.status(500).send('Error retrieving post.');
+            }
         }
     };
 };
