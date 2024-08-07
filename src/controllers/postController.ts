@@ -1,14 +1,17 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import jwt from "jsonwebtoken";
 
 const postController = (prisma: PrismaClient) => {
     return {
         createPost: async (req: Request, res: Response) => {
-            const {authorId, title, content, imageUrl } = req.body;
+            const {authorId, title, content, imageUrl, token } = req.body;
             if (!authorId) return res.status(401).send('Not authorized.');
             try {
+                const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: number };
+                if (!decoded) return res.status(401).send('Unauthorized: Invalid Token.');
                 const post = await prisma.post.create({
-                    data: { title, content, authorId, imageURL: imageUrl }
+                    data: { title, content, authorId: decoded.userId, imageURL: imageUrl },
                 });
                 res.status(201).json(post);
             } catch (error) {
@@ -26,13 +29,15 @@ const postController = (prisma: PrismaClient) => {
         },
 
         getPostsByAuthor: async (req: Request, res: Response) => {
-            const { authorId } = await req.body;
-            const author = authorId;
+            const { token } = await req.body;
+            const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: number };
+            if (!decoded) return res.status(401).send('Unauthorized: Invalid Token.');
+            const author = decoded.userId;
             if (!author || isNaN(Number(author))
             ) return res.status(400).send('Invalid author ID.');
             try {
                 const posts = await prisma.post.findMany({
-                    where: { authorId: Number(author) }
+                    where: { authorId: author }
                 });
                 return res.json(posts);
             } catch (error) {
