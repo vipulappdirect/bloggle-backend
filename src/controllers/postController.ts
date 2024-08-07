@@ -4,11 +4,11 @@ import { PrismaClient } from '@prisma/client';
 const postController = (prisma: PrismaClient) => {
     return {
         createPost: async (req: Request, res: Response) => {
-            const {authorId, title, content } = req.body;
+            const {authorId, title, content, imageUrl } = req.body;
             if (!authorId) return res.status(401).send('Not authorized.');
             try {
                 const post = await prisma.post.create({
-                    data: { title, content, authorId }
+                    data: { title, content, authorId, imageURL: imageUrl }
                 });
                 res.status(201).json(post);
             } catch (error) {
@@ -27,7 +27,6 @@ const postController = (prisma: PrismaClient) => {
 
         getPostsByAuthor: async (req: Request, res: Response) => {
             const { authorId } = await req.body;
-            // const { author } = req.query;
             const author = authorId;
             if (!author || isNaN(Number(author))
             ) return res.status(400).send('Invalid author ID.');

@@ -7,6 +7,7 @@ const authRoutes = (prisma: PrismaClient) => {
     const controller = authController(prisma);
     router.post('/signup', controller.signup);
     router.post('/login', controller.login);
+    router.get('/verify-token', controller.verifyToken);
 
     return router;
 };

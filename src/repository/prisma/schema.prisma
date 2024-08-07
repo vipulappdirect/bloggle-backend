@@ -20,6 +20,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   title     String   @db.Text
   content   String   @db.Text
+  imageURL  String   @default("https://via.placeholder.com/500x250.png?text=Default+Image") @db.VarChar(2000)
   authorId  Int
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id])

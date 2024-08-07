@@ -15,7 +15,7 @@ const authController = (prisma: PrismaClient) => {
                         passwordHash: hashedPassword
                     }
                 }) as User;
-                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1hr' });
                 return res.status(201).json({ token: token, username: user.email});
             } catch (error) {
                 return res.status(500).send('User Already Exist, Please Log In.');
@@ -31,10 +31,21 @@ const authController = (prisma: PrismaClient) => {
                 const validPassword = await bcrypt.compare(password, user.passwordHash);
                 if (!validPassword) return res.status(401).send('Invalid email or passwords.');
 
-                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1hr' });
                 return res.json({ token: token, username: user.email });
             } catch (error) {
                 return res.status(500).send('Error logging in.');
+            }
+        },
+
+        verifyToken: async (req: Request, res: Response) => {
+            const token : string = req.header('Authorization')?.replace('Bearer ', '') as string;
+            try {
+                const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: number };
+                if (!decoded) return res.status(401).send('Unauthorized: Invalid Token.');
+                return res.status(200).send({ message: 'Token is valid.'});
+            } catch (error) {
+                return res.status(401).send('Invalid Token.');
             }
         }
     };
