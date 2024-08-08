@@ -43,7 +43,7 @@ const authController = (prisma: PrismaClient) => {
             try {
                 const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: number };
                 if (!decoded) return res.status(401).send('Unauthorized: Invalid Token.');
-                return res.status(200).send({ message: 'Token is valid.'});
+                return res.status(200).json({ token: token, username: decoded.userId });
             } catch (error) {
                 return res.status(401).send('Invalid Token.');
             }
